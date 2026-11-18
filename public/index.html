@@ -1,10 +1,48 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#292e27"><title>Tispo — Ropa americana</title><meta name="description" content="El cuaderno de estilo de Tispo. Descubre la primera selección de denim, chaquetas y básicos de inspiración americana."><link rel="stylesheet" href="./style.css"></head>
-<body><header><a class="logo" href="#" aria-label="Tispo, inicio">tispo<span>.</span></a><nav><a href="#coleccion">Colección</a><a href="#cuaderno">Cuaderno</a></nav><button id="saved">Guardados <b id="count">0</b></button></header>
-<main><section class="hero"><div class="cover"><img id="hero-photo" alt="Fotografía editorial de denim"><div class="caption">TISPO &nbsp; / &nbsp; CUADERNO DE ESTILO</div></div><div class="intro"><small>COLECCIÓN DE APERTURA</small><h1>El oficio<br>del <i>denim.</i></h1><p>Una mirada a la ropa americana desde el índigo, las capas y los básicos que se llevan todos los días.</p><a class="cta" href="#coleccion">Explorar la colección <span>↓</span></a></div></section>
-<section id="coleccion"><small>LA SELECCIÓN TISPO</small><h2>Prendas de la edición</h2><div class="filters" role="group" aria-label="Filtrar colección"></div><div class="grid" id="grid"></div><p class="fine">Avance editorial · Fotografías de referencia. Precios y tallas se publicarán al abrir la venta.</p></section>
-<section id="cuaderno"><div><small>CUADERNO DE ESTILO</small><h2>Tres prendas,<br><i>un conjunto.</i></h2></div><div><p>Empieza por el jean. Dobla el bajo una vuelta y deja que la camiseta caiga justo sobre la cintura. La chaqueta abierta dibuja dos líneas verticales que unen el conjunto.</p><button class="underline" id="styleAsk">Consultar al asesor ↗</button></div></section></main>
-<footer><a class="logo" href="#">tispo<span>.</span></a><span>Ropa americana &nbsp; / &nbsp; Colección de apertura</span></footer>
-<button class="assist" id="ask">Asesor Tispo ↗</button>
-<dialog id="panel"><button class="close" aria-label="Cerrar">×</button><div id="inside"></div></dialog>
-<script type="module" src="./app.js"></script></body></html>
+<html lang="es-EC"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f9f8f4"><meta name="description" content="Compra ropa americana en Tispo. Elige jeans, camisetas, camisas y chaquetas, selecciona tu talla y haz tu pedido en Ecuador.">
+<meta name="referrer" content="no-referrer"><title>Tispo — Tienda de ropa americana</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css?v=tienda1">
+</head><body>
+<a class="skip" href="#contenido">Saltar a la tienda</a>
+<svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-bag" viewBox="0 0 24 24"><path d="M4 8h16l1 13H3L4 8Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.3 5.8a5.1 5.1 0 0 0-7.2 0L12 7l-1.2-1.2a5.1 5.1 0 0 0-7.2 7.3L12 21l8.4-7.9a5.1 5.1 0 0 0-.1-7.3Z"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="M3 12h17m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+<symbol id="i-minus" viewBox="0 0 24 24"><path d="M4 12h16"/></symbol>
+<symbol id="i-tune" viewBox="0 0 24 24"><path d="M3 7h7m4 0h7M3 17h11m4 0h3"/><circle cx="12" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></symbol>
+<symbol id="i-chevron" viewBox="0 0 24 24"><path d="m8 5 7 7-7 7"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.7 8.7 0 0 1-9 8.5c-1.4 0-2.7-.3-3.9-.8L3 21l1.2-4.7A8.2 8.2 0 0 1 3 11.5 8.7 8.7 0 0 1 12 3a8.7 8.7 0 0 1 9 8.5Z"/><path d="M8 11h8"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="m3 7 9-5 9 5v11l-9 5-9-5V7Zm1 0 8 4.5L20 7M12 12v10M7.5 4.5l9 5v4"/></symbol>
+</svg>
+<div class="market"><div><span class="market-dot"></span> Ropa americana en Ecuador</div><span>USD &nbsp; / &nbsp; Español</span></div>
+<header class="header"><div class="header-inner">
+<button class="icon-button mobile-menu" data-act="menu" aria-label="Abrir menú"><svg><use href="#i-menu"/></svg></button>
+<a class="brand" href="#inicio" aria-label="Tispo, inicio">tispo<span>.</span></a>
+<nav class="primary" aria-label="Colecciones"><a href="#tienda">Tienda</a><a href="#tienda?linea=Mujer">Mujer</a><a href="#tienda?linea=Hombre">Hombre</a><a href="#tienda?linea=Unisex">Unisex</a></nav>
+<div class="header-tools"><button data-act="buscar" class="icon-button" aria-label="Buscar prendas"><svg><use href="#i-search"/></svg></button>
+<a href="#guardados" class="icon-button saved-link" aria-label="Ver favoritos"><svg><use href="#i-heart"/></svg></a>
+<button class="bag-button" data-act="bolsa" aria-label="Abrir bolsa, 0 prendas"><svg><use href="#i-bag"/></svg><span class="bag-word">Bolsa</span><b id="bag-count">0</b></button></div>
+</div></header>
+<main id="contenido" tabindex="-1">
+<section class="hero" id="hero"><picture><source media="(max-width:650px)" srcset="./img/campana/mobile.webp"><img src="./img/campana/hero.webp" alt="Dos modelos con chaquetas y jeans de la campaña Tispo" fetchpriority="high"></picture>
+<div class="hero-content"><p class="hero-kicker">LA COLECCIÓN DENIM</p><h1>Denim<br>americano.</h1><a class="btn pale" href="#tienda?categoria=Jeans">Comprar jeans <svg><use href="#i-right"/></svg></a></div></section>
+<div id="view" class="view"><section class="container collection"><h2>Toda la ropa</h2><p>Cargando prendas…</p></section></div>
+</main>
+<footer class="footer"><div class="footer-main"><div><a class="brand" href="#inicio">tispo<span>.</span></a><p>Ropa americana en Ecuador.</p></div>
+<div><h3>Tienda</h3><a href="#tienda?linea=Mujer">Mujer</a><a href="#tienda?linea=Hombre">Hombre</a><a href="#tienda?linea=Unisex">Unisex</a></div>
+<div><h3>Tu compra</h3><button data-act="bolsa">Mi bolsa</button><a href="#pedidos">Mis pedidos</a><a href="#guardados">Favoritos</a></div>
+<div><h3>Ayuda</h3><button data-act="ayuda" data-id="entregas">Pedidos y entregas</button><button data-act="asesor">Asesor de tienda</button><button data-act="ayuda" data-id="datos">Datos del pedido</button></div></div>
+<div class="footer-end"><span>© Tispo</span><span>Ecuador · Precios en USD</span></div></footer>
+<button id="assistant-launch" class="assistant-launch" data-act="asesor" aria-label="Abrir asesor de tienda"><svg><use href="#i-chat"/></svg><span>Asesor</span></button>
+<dialog id="overlay" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title"></h2><button class="icon-button" data-act="cerrar" aria-label="Cerrar"><svg><use href="#i-close"/></svg></button></div><div id="modal-body"></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript>Activa JavaScript para consultar las prendas y hacer tu pedido.</noscript>
+<script type="module" src="./app.js?v=tienda1"></script>
+</body></html>

@@ -1,1 +1,16 @@
-{"name":"tispo","main":"worker/index.mjs","compatibility_date":"2026-01-01","workers_dev":true,"assets":{"directory":"./public","binding":"ASSETS","run_worker_first":true}}
+{
+  "name": "tispo",
+  "main": "worker/index.mjs",
+  "compatibility_date": "2026-01-01",
+  "workers_dev": true,
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "tispo-pedidos",
+    "database_id": "d255c755-5e10-47f2-a7d0-2f3403b45346",
+    "migrations_dir": "worker/migrations"
+  }],
+  "ratelimits": [
+    { "name": "LIMIT", "namespace_id": "690321", "simple": { "limit": 30, "period": 60 } }
+  ]
+}
