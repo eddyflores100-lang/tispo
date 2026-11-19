@@ -27,6 +27,8 @@ test('recomendación por presupuesto y continuidad al preguntar por talla',()=>{
   const jacket=advice('quiero una chompa');assert.equal(jacket.product,'chaqueta-denim');
   assert.match(advice('¿Cómo mido mi talla?',jacket.product).text,/axila/);
   assert.equal(advice('menos de $3').products.length,0);
+  assert.equal(advice('jeans hasta $25').products.length,0);
+  assert.match(advice('cuánto cuesta', 'camiseta-cruda').text,/18/);
 });
 test('encargo real, repetición concurrente, importe recalculado y recibo privado',async()=>{
   const db=database(),key=privateKey(),data=buyer();

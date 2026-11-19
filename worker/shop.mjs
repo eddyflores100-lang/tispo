@@ -109,7 +109,7 @@ export async function ownerChange(db,ref,data) {
     note=field(data.note||'',0,500,'nota');payUrl=field(data.payUrl||'',0,350,'enlace de pago');
     if(payUrl){
       let url;try{url=new URL(payUrl)}catch{}
-      demand(url?.protocol==='https:'&&!url.username&&!url.password&&!url.port&&['buy.stripe.com','checkout.stripe.com','paypal.me','www.paypal.com','www.paypal.me','www.payphone.app','payp.page'].includes(url.hostname),400,'Usa un enlace de pago HTTPS de los proveedores admitidos.');
+      demand(url?.protocol==='https:'&&!url.username&&!url.password&&!url.port&&['buy.stripe.com','checkout.stripe.com','paypal.me','www.paypal.com','www.paypal.me'].includes(url.hostname),400,'Usa un enlace de pago HTTPS de los proveedores admitidos.');
     }
   }
   const saved=await db.prepare('UPDATE pedidos SET estado=?,precio_final=?,envio=?,nota=?,enlace_pago=?,version=version+1 WHERE referencia=? AND version=? RETURNING *').bind(next,total,shipping,note,payUrl,ref,row.version).first();
@@ -134,7 +134,9 @@ export function advice(message,previous,rows=[]) {
   const terms=q.split(/[^a-z0-9]+/).filter(w=>w.length>2&&!['para','talla','precio','ropa','con','una','los','las','del','que','quiero','combinar','como','por','hay','hasta','menos','puedo','hombre','mujer','busco'].includes(w));
   const stock=variantMap(rows);
   const price=p=>Math.min(...p.sizes.map(s=>unitFor(p,stock.get(variantKey(p.id,s)))));
-  let candidates=catalog.filter(p=>(!group||p.department===group||p.department==='Unisex')&&price(p)<=max);
+  const categoryPatterns={'Jeans':/\b(jeans?|denim|vaqueros?)\b/,'Camisetas':/\b(camisetas?|playeras?|remeras?)\b/,'Camisas':/\bcamisas?\b/,'Chaquetas':/\b(chaquetas?|abrigos?)\b/,'Sudaderas':/\b(sudaderas?|hoodies?)\b/,'Pantalones':/\b(pantalones|pantalon|carpintero)\b/,'Faldas':/\bfaldas?\b/};
+  const category=Object.keys(categoryPatterns).find(label=>categoryPatterns[label].test(q));
+  let candidates=catalog.filter(p=>(!group||p.department===group||p.department==='Unisex')&&(!category||p.category===category)&&price(p)<=max);
   const scored=candidates.map(p=>({p,score:terms.reduce((s,w)=>s+(normalize(p.name+' '+p.category+' '+p.color).includes(w)?3:searchable(p).includes(w)?1:0),0)})).sort((a,b)=>b.score-a.score);
   const hits=scored.filter(x=>x.score>0).map(x=>x.p);
   const item=hits[0]||context;
@@ -142,9 +144,14 @@ export function advice(message,previous,rows=[]) {
   if(/seguimiento|mi pedido|numero de pedido|donde esta mi/.test(q))return reply('Abre Mis pedidos al pie de la tienda o usa el enlace privado de tu comprobante para ver el estado.');
   if(/pagar|envio|entrega|comprar|encargo/.test(q))return reply('Elige talla y añade la prenda a tu bolsa. En un encargo, Tispo confirma el importe y la entrega antes del pago. La compra directa aparece cuando hay stock y cobertura en tu ciudad.',item?[item]:[]);
   if(/talla|medir|medidas/.test(q)&&item)return reply(categoryFit(item.category)+' En '+item.name+' puedes seleccionar '+item.sizes.join(', ')+'.',[item]);
+  if(/stock|existencia|disponib/.test(q)&&item){
+    const ready=rows.filter(r=>r.producto===item.id&&r.unidades>0);
+    return reply(ready.length?item.name+' tiene unidades confirmadas en '+ready.map(r=>r.talla).join(', ')+'.':'Para '+item.name+' recibimos pedidos por encargo. La tienda confirma la talla antes del pago.',[item]);
+  }
+  if(/cuanto cuesta|precio|cuanto vale/.test(q)&&item&&max===Infinity)return reply(item.name+' en '+item.color.toLowerCase()+' figura desde '+money(price(item))+'. La ficha distingue stock confirmado y precio de referencia por encargo.',[item]);
   if(/combina|conjunto|look/.test(q)){const p=item||catalog[0];return reply('Para '+p.name+' en '+p.color.toLowerCase()+', prueba estas prendas del mismo catálogo.',[p,...p.related.map(id=>products.get(id))]);}
   if(/fabric|composicion|origen|material/.test(q))return reply('La selección es de estilo americano. En los encargos confirmamos la composición y el origen con la etiqueta de la prenda.',item?[item]:[]);
-  if(max!==Infinity||group||hits.length){const choices=hits.length?hits:candidates.sort((a,b)=>price(a)-price(b));return choices.length?reply('Estas opciones encajan con tu búsqueda. '+choices.slice(0,3).map(p=>p.name+' en '+p.color.toLowerCase()+' desde '+money(price(p))).join(' · ')+'.',choices):reply('No encontré referencias con ese presupuesto. Prueba un importe mayor o cambia de categoría.');}
+  if(max!==Infinity||group||category||hits.length){const choices=hits.length?hits:candidates.sort((a,b)=>price(a)-price(b));return choices.length?reply('Estas opciones encajan con tu búsqueda. '+choices.slice(0,3).map(p=>p.name+' en '+p.color.toLowerCase()+' desde '+money(price(p))).join(' · ')+'.',choices):reply('No encontré referencias con ese presupuesto. Prueba un importe mayor o cambia de categoría.');}
   if(context)return reply(context.name+' viene en '+context.color.toLowerCase()+'. Puedes elegir talla en su ficha o pedirme una combinación.',[context]);
   return reply('Puedo buscar por categoría, color o presupuesto y ayudarte a elegir talla. Por ejemplo: «camisetas hasta $25».',catalog.slice(0,2));
 }

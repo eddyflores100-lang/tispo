@@ -85,12 +85,11 @@ export default {
     const url=new URL(request.url),path=url.pathname;
     if(!path.startsWith('/api/')){
       if(!['HEAD','GET'].includes(request.method))return new Response(null,{status:405});
-      if(env.ASSETS)return env.ASSETS.fetch(request);
-      // GitHub Pages is the canonical static build when the connector deploys the Worker without an assets binding.
-      const remote=new URL(pagesOrigin);remote.pathname='/tispo'+path;remote.search=url.search;
-      const upstream=await fetch(remote,{method:request.method,redirect:'manual'});
-      const headers=new Headers(upstream.headers);headers.set('Referrer-Policy','no-referrer');headers.set('X-Content-Type-Options','nosniff');
-      return new Response(upstream.body,{status:upstream.status,headers});
+      const assetURL=new URL(request.url);
+      if(path==='/')assetURL.pathname='/index.html';
+      const asset=await env.ASSETS.fetch(new Request(assetURL,request));
+      const headers=new Headers(asset.headers);headers.set('Referrer-Policy','no-referrer');headers.set('X-Content-Type-Options','nosniff');
+      return new Response(asset.body,{status:asset.status,headers});
     }
     const origin=request.headers.get('Origin');
     if(origin&&!checkoutOrigins.has(origin))return returnJSON({error:'Origen no permitido.'},403);

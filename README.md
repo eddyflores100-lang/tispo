@@ -1,6 +1,6 @@
 # Tispo · Tienda de ropa americana
 
-**[Abrir tienda](https://eddyflores100-lang.github.io/tispo/)** · **[Panel de gestión](https://tispo.eddyflores100.workers.dev/gestion.html)**
+**[Abrir tienda](https://tispo.eddyflores100.workers.dev/)** · **[Acceso desde GitHub Pages](https://eddyflores100-lang.github.io/tispo/)** · **[Panel de gestión](https://tispo.eddyflores100.workers.dev/gestion.html)**
 
 Tienda en español con doce referencias de lanzamiento, categorías, colecciones, búsqueda por color o corte, favoritos locales y compra rápida por talla. La bolsa conserva cantidades y variantes en el dispositivo. El asesor consulta el mismo catálogo que el escaparate.
 
@@ -27,7 +27,7 @@ Abre el enlace recién creado desde la tabla. Caduca en 24 horas. Mantén estos 
 - `public/`: tienda estática y panel. `public/catalog.json` contiene la selección base, las tallas de referencia y precios orientativos en centavos de USD. Las imágenes de campaña y producto son originales generadas para esta tienda.
 - `worker/`: API de pedidos, asesor, gestión y migración D1. El comprador autentica el seguimiento con una llave aleatoria y el servidor guarda su hash. La gestión usa sesiones separadas. La base D1 queda restringida a la cuenta de Cloudflare.
 - `node --test worker/test.mjs` con Node 24 ejecuta las pruebas con SQLite, incluidas idempotencia, stock, seguimiento, ofertas y controles de acceso.
-- GitHub Actions prueba y publica `public/` en Pages al actualizar `main`. Para publicar en Cloudflare desde una sesión de Wrangler autorizada, ejecuta `npx wrangler d1 migrations apply tispo-pedidos --remote` y `npx wrangler deploy`. El Worker puede servir sus assets estáticos nativos o la misma compilación de Pages cuando se despliega sin binding de assets.
+- GitHub Actions prueba la tienda y publica el acceso de `pages/` al actualizar `main`. GitHub Pages conserva los enlaces anteriores y lleva al cliente a Cloudflare. La tienda comercial, sus imágenes, el checkout, el panel y la base de pedidos se sirven en Cloudflare. Para publicar en Cloudflare desde una sesión de Wrangler autorizada, ejecuta `npx wrangler d1 migrations apply tispo-pedidos --remote` y `npx wrangler deploy`. Los archivos del escaparate se despliegan junto al Worker mediante su binding ASSETS.
 - Las licencias de las tipografías distribuidas se encuentran en `public/fonts/`.
 
 ## Referencias de compra

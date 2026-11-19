@@ -3,7 +3,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f9f8f4"><meta name="description" content="Compra ropa americana en Tispo. Elige jeans, camisetas, camisas y chaquetas, selecciona tu talla y haz tu pedido en Ecuador.">
 <meta name="referrer" content="no-referrer"><title>Tispo — Tienda de ropa americana</title>
-<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css?v=tienda1">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./style.css?v=tienda2">
 </head><body>
 <a class="skip" href="#contenido">Saltar a la tienda</a>
 <svg class="symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -31,8 +31,8 @@
 <button class="bag-button" data-act="bolsa" aria-label="Abrir bolsa, 0 prendas"><svg><use href="#i-bag"/></svg><span class="bag-word">Bolsa</span><b id="bag-count">0</b></button></div>
 </div></header>
 <main id="contenido" tabindex="-1">
-<section class="hero" id="hero"><picture><source media="(max-width:650px)" srcset="./img/campana/mobile.webp"><img src="./img/campana/hero.webp" alt="Dos modelos con chaquetas y jeans de la campaña Tispo" fetchpriority="high"></picture>
-<div class="hero-content"><p class="hero-kicker">LA COLECCIÓN DENIM</p><h1>Denim<br>americano.</h1><a class="btn pale" href="#tienda?categoria=Jeans">Comprar jeans <svg><use href="#i-right"/></svg></a></div></section>
+<template id="hero-template"><section class="hero campaign-in-shop"><picture><source media="(max-width:650px)" srcset="./img/campana/mobile.webp"><img src="./img/campana/hero.webp" alt="Dos modelos con chaquetas y jeans de la campaña Tispo" fetchpriority="high"></picture>
+<div class="hero-content"><p class="hero-kicker">LA COLECCIÓN DENIM</p><h2>Denim<br>americano.</h2><a class="btn pale" href="#tienda?categoria=Jeans">Comprar jeans <svg><use href="#i-right"/></svg></a></div></section></template>
 <div id="view" class="view"><section class="container collection"><h2>Toda la ropa</h2><p>Cargando prendas…</p></section></div>
 </main>
 <footer class="footer"><div class="footer-main"><div><a class="brand" href="#inicio">tispo<span>.</span></a><p>Ropa americana en Ecuador.</p></div>
@@ -44,5 +44,5 @@
 <dialog id="overlay" aria-labelledby="modal-title"><div class="modal-head"><h2 id="modal-title"></h2><button class="icon-button" data-act="cerrar" aria-label="Cerrar"><svg><use href="#i-close"/></svg></button></div><div id="modal-body"></div></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <noscript>Activa JavaScript para consultar las prendas y hacer tu pedido.</noscript>
-<script type="module" src="./app.js?v=tienda1"></script>
+<script type="module" src="./app.js?v=tienda2"></script>
 </body></html>

@@ -35,13 +35,16 @@ function card(p,index){
   const price=pricing(p);
   return '<article class="card"><a class="card-image" href="#producto/'+p.id+'" aria-label="Ver '+e(p.name+' '+p.color)+'"><img src="'+imagePath(p.id)+'" alt="'+e(p.name+' en '+p.color.toLowerCase())+'" width="456" height="570" loading="'+(index<4?'eager':'lazy')+'"></a>'+heart(p)+'<div class="card-info"><p class="card-dept">'+e(p.department)+' · '+e(p.category)+'</p><div class="card-line"><h3><a href="#producto/'+p.id+'">'+e(p.name)+'</a></h3><span class="price">'+price.text+'</span></div><p class="card-color"><i class="swatch" style="--color:'+p.swatch+'"></i>'+e(p.color)+'</p><button class="quick" data-act="rapido" data-id="'+p.id+'" aria-label="Elegir talla de '+e(p.name+' '+p.color)+'">Elegir talla '+icon('plus')+'</button></div></article>';
 }
-function collection(params,saved=false){
+function collection(params,saved=false,home=false){
   const rows=saved?list.filter(p=>favorites.has(p.id)):filtered(params);
   const category=params.get('categoria'),line=params.get('linea'),search=params.get('q'),size=params.get('talla');
   const title=saved?'Tus favoritos':search?'Resultados de búsqueda':category||(!line?'Toda la ropa':'Ropa de '+line.toLowerCase());
   const filteredNow=Boolean(size||line||category||search);
   const titleNote=saved?'Las prendas que guardaste en este dispositivo.':search?'Búsqueda: «'+e(search)+'»':'Precios en USD · Las referencias por encargo se cotizan antes del pago.';
-  $('#view').innerHTML='<section class="container collection"><div class="collection-title"><div><h2>'+e(title)+' <span>('+rows.length+')</span></h2><p class="collection-sub">'+titleNote+'</p></div>'+(!saved?'<div class="tools"><button class="lite" data-act="filtros">'+icon('tune')+' Filtros'+(size?' · '+e(size):'')+'</button></div>':'')+'</div>'+(!saved?'<div class="controls"><div class="categories" aria-label="Categorías">'+['Todas',...categories].map(c=>'<a class="chip '+((category||'Todas')===c?'on':'')+'" href="'+e(shopLink({categoria:c},params))+'">'+e(c)+'</a>').join('')+'</div><select class="order-select" id="order-select" aria-label="Ordenar prendas">'+sortOptions.map(([v,label])=>opt(v,label,params.get('ordenar')||'destacadas')).join('')+'</select></div>':'')+(filteredNow&&!saved?'<div class="wrap-actions"><a class="text-button fine" href="#tienda">Quitar filtros</a></div>':'')+(rows.length?'<div class="grid">'+rows.map(card).join('')+'</div>':empty(saved?'Todavía no tienes favoritos':'No encontramos prendas con esos filtros',saved?'Toca el corazón de una prenda para guardarla.':'Prueba otra talla, categoría o búsqueda.'))+'</section>';
+  const grid=items=>'<div class="grid">'+items.map(card).join('')+'</div>';
+  let merchandise=rows.length?grid(rows):empty(saved?'Todavía no tienes favoritos':'No encontramos prendas con esos filtros',saved?'Toca el corazón de una prenda para guardarla.':'Prueba otra talla, categoría o búsqueda.');
+  if(home&&rows.length>4)merchandise=grid(rows.slice(0,4))+$('#hero-template').innerHTML+grid(rows.slice(4));
+  $('#view').innerHTML='<section class="container collection"><div class="collection-title"><div><h1>'+e(title)+' <span>('+rows.length+')</span></h1><p class="collection-sub">'+titleNote+'</p></div>'+(!saved?'<div class="tools"><button class="lite" data-act="filtros">'+icon('tune')+' Filtros'+(size?' · '+e(size):'')+'</button></div>':'')+'</div>'+(!saved?'<div class="controls"><div class="categories" aria-label="Categorías">'+['Todas',...categories].map(c=>'<a class="chip '+((category||'Todas')===c?'on':'')+'" href="'+e(shopLink({categoria:c},params))+'">'+e(c)+'</a>').join('')+'</div><select class="order-select" id="order-select" aria-label="Ordenar prendas">'+sortOptions.map(([v,label])=>opt(v,label,params.get('ordenar')||'destacadas')).join('')+'</select></div>':'')+(filteredNow&&!saved?'<div class="wrap-actions"><a class="text-button fine" href="#tienda">Quitar filtros</a></div>':'')+merchandise+'</section>';
   const select=$('#order-select');if(select)select.onchange=()=>location.hash=shopLink({ordenar:select.value},params);
 }
 function sizeButtons(p,context){
@@ -123,10 +126,10 @@ async function action(button){
 }
 function routePage(scroll=true){
   const {path,params}=route(),home=['','inicio','contenido'].includes(path);
-  closeModal();$('#hero').hidden=!home;$('#assistant-launch').hidden=path==='comprar'||path.startsWith('pedido/');
+  closeModal();$('#assistant-launch').hidden=path==='comprar'||path.startsWith('pedido/');
   document.querySelectorAll('.primary a').forEach(a=>a.classList.toggle('active',a.hash===location.hash));
   document.title='Tispo — Tienda de ropa americana';
-  if(home||path==='tienda'||path==='guardados')collection(params,path==='guardados');
+  if(home||path==='tienda'||path==='guardados')collection(params,path==='guardados',home);
   else if(path.startsWith('producto/')){
     const p=store.products.get(path.split('/')[1]);if(p){currentProduct=p;selectedSize='';product(p);document.title=p.name+' · '+p.color+' | Tispo'}else $('#view').innerHTML=empty('Prenda no encontrada','Revisa las referencias que están en la tienda.');
   }else if(path==='comprar')checkout.checkout();
@@ -143,7 +146,7 @@ async function start(){
     document.addEventListener('click',event=>{const button=event.target.closest('[data-act]');if(button){action(button).catch(()=>toast('No se pudo completar la acción. Vuelve a intentarlo.'));return}const anchor=event.target.closest('a[href^="#"]');if(anchor&&$('#overlay').open)closeModal();if(anchor?.hash===location.hash&&anchor.hash.startsWith('#producto/'))routePage()});
     $('#overlay').onclick=event=>{if(event.target===$('#overlay')){const r=event.target.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeModal()}};
     store.saveCart();window.addEventListener('hashchange',()=>routePage());routePage(false);
-    store.refresh().then(ok=>{if(ok&&!$('#overlay').open){const p=route().path;if(['','inicio','tienda','guardados'].includes(p))collection(route().params,p==='guardados');if(p.startsWith('producto/')&&currentProduct&&store.products.get(p.split('/')[1])===currentProduct)product(currentProduct);if(p==='comprar')checkout.checkout()}});
+    store.refresh().then(ok=>{if(ok&&!$('#overlay').open){const p=route().path;if(['','inicio','tienda','guardados'].includes(p))collection(route().params,p==='guardados',['','inicio'].includes(p));if(p.startsWith('producto/')&&currentProduct&&store.products.get(p.split('/')[1])===currentProduct)product(currentProduct);if(p==='comprar')checkout.checkout()}});
     checkout.recover();
   }catch{$('#view').innerHTML='<section class="container empty"><h2>No se pudo cargar la tienda</h2><p>Comprueba tu conexión y vuelve a cargar la página.</p><a class="btn" href="./">Reintentar</a></section>'}
 }
